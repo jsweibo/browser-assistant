@@ -1,0 +1,42 @@
+#assistant {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 2147483647;
+  font-size: 16px;
+  height: 4em;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.menu-item {
+  width: 4em;
+  line-height: 4em;
+  text-align: center;
+  color: #fff;
+  background-color: #000a;
+  cursor: pointer;
+  user-select: none;
+}
+
+.active {
+  background-color: #6669 !important;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.sub-context-menu {
+  display: flex;
+}
+
+.sub-panel {
+  display: flex;
+}
+
+@media screen and (min-width: 768px) {
+  .menu-item:hover {
+    background-color: #6669 !important;
+  }
+}
