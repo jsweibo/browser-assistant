@@ -1,0 +1,30 @@
+{
+  "manifest_version": 2,
+  "name": "Assistant",
+  "description": "It is an assistant",
+  "version": "1.0.0",
+  "icons": {
+    "64": "icons/icon.png"
+  },
+  "background": {
+    "scripts": ["js/default-settings.js", "background_script.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "all_frames": true,
+      "matches": ["<all_urls>"],
+      "js": ["content_script.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "browser_action": {
+    "default_title": "Open Options"
+  },
+  "options_ui": {
+    "page": "options/index.html",
+    "open_in_tab": true
+  },
+  "permissions": ["<all_urls>", "storage", "unlimitedStorage", "downloads"],
+  "web_accessible_resources": ["css/toolbar.css"]
+}
