@@ -1,18 +1,6 @@
 let config = null;
 let toolbarDOM = null;
 
-function start() {
-  executeScript({
-    code: `(function () {
-        const _attachShadow = Element.prototype.attachShadow;
-        Element.prototype.attachShadow = function (run) {
-          run.mode = 'open';
-          return _attachShadow.call(this, run);
-        };
-      })()`,
-  });
-}
-
 function executeScript(details) {
   const temp = document.createElement('script');
   temp.textContent = details.code;
@@ -135,6 +123,16 @@ function getCoordinate(clientX, clientY) {
 }
 
 function run() {
+  executeScript({
+    code: `(function () {
+        const _attachShadow = Element.prototype.attachShadow;
+        Element.prototype.attachShadow = function (run) {
+          run.mode = 'open';
+          return _attachShadow.call(this, run);
+        };
+      })()`,
+  });
+
   const container = document.createElement('jsweibo-assistant');
   toolbarDOM = container;
   const shadowRoot = container.attachShadow({
@@ -367,19 +365,34 @@ chrome.runtime.onMessage.addListener(function (message) {
 
 function runCheck() {
   if (config.status) {
-    const patterns = config.rules.map(function (item) {
+    let disableFlag = false;
+
+    const excludeRules = config.excludeRules.map(function (item) {
       return new RegExp(item);
     });
 
-    for (let pattern of patterns) {
-      if (pattern.test(location.href)) {
-        // inject
-        if (!config.onlyTop) {
-          run();
-        } else if (top === window) {
-          run();
-        }
+    for (let excludeRule of excludeRules) {
+      if (excludeRule.test(location.href)) {
+        disableFlag = true;
         break;
+      }
+    }
+
+    if (!disableFlag) {
+      const rules = config.rules.map(function (item) {
+        return new RegExp(item);
+      });
+
+      for (let rule of rules) {
+        if (rule.test(location.href)) {
+          // inject
+          if (!config.onlyTop) {
+            run();
+          } else if (top === window) {
+            run();
+          }
+          break;
+        }
       }
     }
   }
@@ -414,6 +427,3 @@ chrome.storage.onChanged.addListener(function (changes) {
     }
   }
 });
-
-// start
-start();

@@ -6,6 +6,7 @@ const configForm = document.querySelector('#config');
 const statusInput = document.querySelector('#status');
 const onlyTopInput = document.querySelector('#onlyTop');
 const rulesInput = document.querySelector('#rules');
+const excludeRulesInput = document.querySelector('#excludeRules');
 const playbackRatesInput = document.querySelector('#playbackRates');
 
 const SETTINGS_PREFIX = 'browser-assistant.settings';
@@ -25,6 +26,7 @@ function writeSettings(settings) {
   statusInput.checked = settings.status;
   onlyTopInput.checked = settings.onlyTop;
   rulesInput.value = JSON.stringify(settings.rules, null, 2);
+  excludeRulesInput.value = JSON.stringify(settings.excludeRules, null, 2);
   playbackRatesInput.value = JSON.stringify(settings.playbackRates, null, 2);
 }
 
@@ -201,6 +203,29 @@ configForm.addEventListener('submit', function (event) {
     }
     // pass check
     savedConfig.rules = JSON.parse(rulesInput.value);
+  }
+
+  if (excludeRulesInput.value) {
+    // check rules syntax
+    try {
+      const excludeRules = JSON.parse(excludeRulesInput.value);
+      if (!Array.isArray(excludeRules)) {
+        notify({
+          type: 'error',
+          message: 'Invalid Rules',
+        });
+        return false;
+      }
+      excludeRulesInput.value = JSON.stringify(excludeRules, null, 2);
+    } catch (error) {
+      notify({
+        type: 'error',
+        message: error.message,
+      });
+      return false;
+    }
+    // pass check
+    savedConfig.excludeRules = JSON.parse(excludeRulesInput.value);
   }
 
   if (playbackRatesInput.value) {

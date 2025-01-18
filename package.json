@@ -24,8 +24,8 @@
   "homepage": "https://github.com/jsweibo/browser-assistant#readme",
   "devDependencies": {
     "delete": "^1.1.0",
-    "eslint": "^8.40.0",
-    "eslint-config-prettier": "^8.8.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^8.10.0",
     "eslint-plugin-prettier": "^4.2.1",
     "gulp": "^4.0.2",
     "prettier": "^2.8.8"
